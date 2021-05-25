@@ -1,4 +1,10 @@
-require "active_support/core_ext/integer/time"
+# frozen_string_literal: true
+
+require 'active_support/core_ext/integer/time'
+
+Bullet.enable = true
+Bullet.console = true
+Bullet.rails_logger = true
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
