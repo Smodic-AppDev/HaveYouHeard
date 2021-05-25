@@ -10,11 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_200039) do
+ActiveRecord::Schema.define(version: 2021_05_25_203340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
+
+  create_table "follow_requests", force: :cascade do |t|
+    t.bigint "recipient_id", null: false
+    t.bigint "sender_id", null: false
+    t.string "status", default: "pending"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recipient_id"], name: "index_follow_requests_on_recipient_id"
+    t.index ["sender_id"], name: "index_follow_requests_on_sender_id"
+  end
+
+  create_table "likes", force: :cascade do |t|
+    t.bigint "fan_id", null: false
+    t.string "song_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["fan_id"], name: "index_likes_on_fan_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.citext "email", default: "", null: false
@@ -34,4 +52,7 @@ ActiveRecord::Schema.define(version: 2021_05_25_200039) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "follow_requests", "users", column: "recipient_id"
+  add_foreign_key "follow_requests", "users", column: "sender_id"
+  add_foreign_key "likes", "users", column: "fan_id"
 end
