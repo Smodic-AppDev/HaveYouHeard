@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
 require 'active_support/core_ext/integer/time'
 
 Bullet.enable = true
