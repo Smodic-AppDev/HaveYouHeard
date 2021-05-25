@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-
 require 'active_support/core_ext/integer/time'
 
-Bullet.enable = true
-Bullet.console = true
-Bullet.rails_logger = true
-
 Rails.application.configure do
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  Bullet.enable = true
+  Bullet.console = true
+  Bullet.rails_logger = true
+
   # Settings specified here will take precedence over those in config/application.rb.
   config.hosts.clear
   # Allow all Gitpod IPs to render the BetterErrors page
