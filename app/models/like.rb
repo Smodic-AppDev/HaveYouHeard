@@ -17,5 +17,7 @@
 #  fk_rails_...  (fan_id => users.id)
 #
 class Like < ApplicationRecord
-  belongs_to :fan
+  belongs_to :fan, class_name: "User", counter_cache: true
+  
+  validates :fan_id, uniqueness: { scope: :song_id, message: "has already liked this song" }
 end
