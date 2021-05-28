@@ -1,5 +1,5 @@
 class SpotifyController < ApplicationController
-  #before_action(:spotify_authentication)
+  before_action(:spotify_authentication)
 
   #SPOTIFY APP LOGIN
   def spotify_authentication
@@ -17,4 +17,4 @@ class SpotifyController < ApplicationController
 
 
 
-  end
+end
