@@ -5,26 +5,30 @@
 					Looking for a song?
 				</h2>
 
-				<form action="/search_results">
-					<div class="form-group">
-						<label for="zebra">
-            Enter the name of the song below.
-            </label>
+        <%= form_with(url: search_results_path, method: :get) do %>
+
+        <div class="form-group">
+						
+            <%= label_tag :song_box, "Enter the name of the song below." %>            
 
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text">
-                <i class="fas fa-search"></i>
-              </span>
+                  <i class="fas fa-search"></i>
+                </span>
 							</div>
-							<input class="form-control" id="zebra" name="query_song_name" type="text" placeholder="Example: Let It Be">
-          </div>
-						</div>
 
-						<button class="btn btn-primary btn-block">
-          Find Song
-        </button>
-				</form>
+							<%= text_field_tag :query_song_name, "", {placeholder: "Example: Let It Be", id: "song_box", class: "form-control"}  %>
+              
+            </div>
+					</div>
+
+          <button class="btn btn-primary btn-block">
+            Find Song
+          </button>
+
+        <% end %>
+
 			</div>
 		</div>
 	</div>
