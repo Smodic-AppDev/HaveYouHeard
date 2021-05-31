@@ -9,6 +9,8 @@ Rails.application.configure do
   Bullet.console = true
   Bullet.rails_logger = true
 
+
+
   # Settings specified here will take precedence over those in config/application.rb.
   config.hosts.clear
   # Allow all Gitpod IPs to render the BetterErrors page

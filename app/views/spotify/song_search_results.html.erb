@@ -6,16 +6,17 @@
 <div class="row mb-5 justify-content-center">  
     <% @tracks.each_with_index do |a_track, the_index| %>
       <div class="card mb-3" style="width: 18rem;">
-        <img class="card-img-top" src="<%= a_track.album.images.at(-2).fetch("url") %>" alt="Card image cap">
-                
+        
+        <%= image_tag a_track.album.images.at(-2).fetch("url"), class: "card-img-top", alt: "Card image cap" %>
+                        
         <div class="card-img-overlay">
             <h1 class="text-right">
               <% if a_track.preview_url.nil? %>
                 <!-- Intentionally blank -->
               <% else %>
-                <a href="<%= a_track.preview_url %>" class="text-light">
+                <%= link_to a_track.preview_url, class: "text-light" do %>
                   <i class="far fa-play-circle"></i>
-                </a>
+                <% end %>
               <% end %>
             </h1>
         </div>
@@ -23,10 +24,13 @@
         <div class="card-body">
           
           <% if a_track.name.length > 25 %>
-            <a href="/song/<%= a_track.id %>" class="card-title card-link font-weight-bold"><%= a_track.name[0..24] %>...</a>
+            <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
+              <%= a_track.name[0..24] %>...
+            <% end %>
           <% else %>
-            <a href="/song/<%= a_track.id %>" class="card-title card-link font-weight-bold"><%= a_track.name %></a>
-            <!--<h6 class="card-title"><%= a_track.name %></h6>-->
+            <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
+              <%= a_track.name %>
+            <% end %>
           <% end %>
           
           <% if a_track.artists.first.name.length > 22 %>
@@ -34,59 +38,25 @@
           <% else %>
             <p class="card-text">by <%= a_track.artists.first.name %></p>
           <% end %>
+
           <div>
             <% if current_user.likes.where(song_id: a_track.id).count == 0 %>
-              <form action="/insert_like" method="post">
-                <input type="hidden" name="query_user_id" value="<%= current_user.id %>">
-                <input type="hidden" name="query_song_id" value="<%= a_track.id %>">
-                <!-- Determine which people the user leaders likes the song -->
-                <% 
-                  song_likes = Like.all.where(song_id: a_track.id)
-                  follow_ids = current_user.leaders.pluck(:recipient_id)
-                  follow_likes = song_likes.where(user_id: follow_ids).order(created_at: "asc")              
-                %>
-                <% if follow_likes.count == 0 %>
-                  <small>Be the first to like this</small>
-                <% elsif follow_likes.count ==1 %>
-                  <small>
-                    <%= User.all.where(id: follow_likes.at(0).user_id).first.first_name %> likes this
-                  </small>
-                <% else %>
-                  <small>
-                    <%= User.all.where(id: follow_likes.at(0).user_id).first.first_name %> and
-                    <%= follow_likes.count - 1 %> more like this
-                  </small>
-                <% end %>            
-                <button class="btn btn-link card-link pull-right">
-                  <i class="far fa-heart"></i> Like
-                </button>
-              </form>
+
+              
+              
+              <%= render "likes/form", like: current_user.likes.build(song_id: a_track.id) %>
+
             <% else %>  
-              <form action="/delete_like" method="post">
-                <input type="hidden" name="query_id" value="<%= Like.all.where(user_id: current_user.id, song_id: a_track.id).first.id %>">
-                <!-- Determine which people the user leaders likes the song -->
-                <% 
-                  song_likes = Like.all.where(song_id: a_track.id)
-                  follow_ids = current_user.leaders.pluck(:recipient_id)
-                  follow_ids = follow_ids.push(current_user.id)
-                  follow_likes = song_likes.where(user_id: follow_ids).order(created_at: "asc")              
-                %>
-                <% if follow_likes.count == 1 %>
-                  <small>You like this</small>
-                <% elsif User.all.where(id: follow_likes.at(0).user_id).first.id == current_user.id %>
-                  <small>
-                    You and <%= follow_likes.count - 1 %> more like this
-                  </small>
-                <% else %>
-                  <small>
-                    <%= User.all.where(id: follow_likes.at(0).user_id).first.first_name %> and
-                    <%= follow_likes.count - 1 %> more like this
-                  </small>
-                <% end %> 
-                <button class="btn btn-link card-link pull-right">
-                  <i class="fas fa-heart"></i> Unlike
-                </button>
-              </form>
+
+              <%= render "likes/who_likes", a_track: a_track %>
+              
+              <% like = current_user.likes.find_by(song_id: a_track.id) %>
+              <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
+                <i class="fas fa-heart fa-fw"></i>
+                Un-like
+              <% end %>
+              
+              
             <% end %>
           </div>
         </div>

@@ -25,10 +25,10 @@ class LikesController < ApplicationController
 
     respond_to do |format|
       if @like.save
-        format.html { redirect_to @like, notice: "Like was successfully created." }
+        format.html { redirect_back fallback_location: root_url, notice: "Like was successfully created." }
         format.json { render :show, status: :created, location: @like }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { redirect_to root_url, status: :unprocessable_entity, alert: "Error creating like" }
         format.json { render json: @like.errors, status: :unprocessable_entity }
       end
     end

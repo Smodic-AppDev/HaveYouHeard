@@ -22,6 +22,10 @@ class SpotifyController < ApplicationController
     
   end
 
+  def song_details
+  
+  end
+
 
 
 end

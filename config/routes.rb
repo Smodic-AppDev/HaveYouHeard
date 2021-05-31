@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   get "/search" => "spotify#search_form", as: :search
   get "/search_results" => "spotify#return_search_results", as: :search_results
+  get "/song/:path_id" => "spotify#song_details", as: :song_details
 
   get "user_index" => "users#user_index", as: :user_index
   get ":username" => "users#show", as: :user
