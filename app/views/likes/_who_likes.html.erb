@@ -1,19 +1,17 @@
-<!-- Determine which people the user leaders likes the song -->
 <% 
   song_likes = Like.all.where(song_id: a_track.id)
-  follow_ids = current_user.leaders.pluck(:recipient_id)
-  follow_ids = follow_ids.push(current_user.id)
-  follow_likes = song_likes.where(fan_id: follow_ids).order(created_at: "asc")              
+  leader_ids = current_user.leaders.pluck(:recipient_id)
+  leader_likes = song_likes.where(user_id: leader_ids).order(created_at: "asc")              
 %>
-<% if follow_likes.count == 1 %>
-  <small>You like this</small>
-<% elsif User.all.where(id: follow_likes.at(0).user_id).first.id == current_user.id %>
+<% if leader_likes.count == 0 %>
+  <small>Be the first to like this</small>
+<% elsif leader_likes.count == 1 %>
   <small>
-    You and <%= follow_likes.count - 1 %> more like this
+    <%= User.all.where(id: leader_likes.at(0).user_id).first.first_name %> likes this
   </small>
 <% else %>
   <small>
-    <%= User.all.where(id: follow_likes.at(0).fan_id).first.first_name %> and
-    <%= follow_likes.count - 1 %> more like this
+    <%= User.all.where(id: leader_likes.at(0).user_id).first.first_name %> and
+    <%= leader_likes.count - 1 %> more like this
   </small>
-<% end %>
+<% end %>            

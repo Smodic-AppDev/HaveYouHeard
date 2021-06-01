@@ -10,6 +10,10 @@ class UsersController < ApplicationController
   end 
   
   def user_index
+    @followed_users = current_user.leaders.order(last_name: "asc")
+    leader_ids = @followed_users.pluck(:recipient_id)
+    leader_ids = leader_ids.push(current_user.id)
+    @non_followed_users = User.all.where.not(id: leader_ids).order(last_name:"asc")
     render "users/index.html.erb"
   end
 

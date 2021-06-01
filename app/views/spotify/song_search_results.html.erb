@@ -42,13 +42,13 @@
           <div>
             <% if current_user.likes.where(song_id: a_track.id).count == 0 %>
 
-              <!-- Add in "who likes partial updated for non-liked songs -->
+              <%= render "likes/who_likes", a_track: a_track %>
               
               <%= render "likes/form", like: current_user.likes.build(song_id: a_track.id) %>
 
             <% else %>  
 
-              <%= render "likes/who_likes", a_track: a_track %>
+              <%= render "likes/who_else_likes", a_track: a_track %>
               
               <% like = current_user.likes.find_by(song_id: a_track.id) %>
               <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
