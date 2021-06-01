@@ -5,7 +5,7 @@
 
 <div class="row mb-5 justify-content-center">  
     <% @tracks.each_with_index do |a_track, the_index| %>
-      <div class="card mb-3" style="width: 18rem;">
+      <div class="card mb-3 px-0" style="width: 18rem;">
         
         <%= image_tag a_track.album.images.at(-2).fetch("url"), class: "card-img-top", alt: "Card image cap" %>
                         
@@ -42,7 +42,7 @@
           <div>
             <% if current_user.likes.where(song_id: a_track.id).count == 0 %>
 
-              
+              <!-- Add in "who likes partial updated for non-liked songs -->
               
               <%= render "likes/form", like: current_user.likes.build(song_id: a_track.id) %>
 
@@ -53,7 +53,7 @@
               <% like = current_user.likes.find_by(song_id: a_track.id) %>
               <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
                 <i class="fas fa-heart fa-fw"></i>
-                Un-like
+                Unlike
               <% end %>
               
               
