@@ -4,96 +4,24 @@
 <hr>
 
 <div class="row mb-5 justify-content-center">  
-    <% @tracks.each_with_index do |a_track, the_index| %>
-      <div class="card mb-3 px-0" style="width: 18rem;">
-        
-        <%= image_tag a_track.album.images.at(-2).fetch("url"), class: "card-img-top", alt: "Card image cap" %>
-                        
-        <div class="card-img-overlay">
-            <h1 class="text-right">
-              <% if a_track.preview_url.nil? %>
-                <!-- Intentionally blank -->
-              <% else %>
-                <%= link_to a_track.preview_url, class: "text-light" do %>
-                  <i class="far fa-play-circle"></i>
-                <% end %>
-              <% end %>
-            </h1>
-        </div>
-        
-        <div class="card-body">
-          
-          <% if a_track.name.length > 25 %>
-            <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
-              <%= a_track.name[0..24] %>...
-            <% end %>
-          <% else %>
-            <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
-              <%= a_track.name %>
-            <% end %>
-          <% end %>
-          
-          <% if a_track.artists.first.name.length > 22 %>
-            <p class="card-text">by <%= a_track.artists.first.name[0..21] %>...</p>
-          <% else %>
-            <p class="card-text">by <%= a_track.artists.first.name %></p>
-          <% end %>
-
-          <div>
-            <% if current_user.likes.where(song_id: a_track.id).count == 0 %>
-
-              <%= render "likes/who_likes", a_track: a_track %>
-              
-              <%= render "likes/form", like: current_user.likes.build(song_id: a_track.id) %>
-
-            <% else %>  
-
-              <%= render "likes/who_else_likes", a_track: a_track %>
-              
-              <% like = current_user.likes.find_by(song_id: a_track.id) %>
-              <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
-                <i class="fas fa-heart fa-fw"></i>
-                Unlike
-              <% end %>
-              
-              
-            <% end %>
-          </div>
-        </div>
-      </div>
+    <% @tracks.each do |a_track| %>
+      
+      <%= render "spotify/song_card", a_track: a_track %>
         
     <% end %>
 </div>
 
 <hr>
 
-<div class="container-fluid py-6">
+<div class="container-fluid py-6 mb-5">
 		<div class="row">
 			<div class="col-md-6 offset-md-3 text-black">
 				<h2 class="font-weight-bold">
 					Looking for something else?
 				</h2>
 
-				<form action="/search_results">
-					<div class="form-group">
-						<label for="zebra">
-            Enter the name of the song below.
-            </label>
+				<%= render "spotify/search_form" %>
 
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-                <i class="fas fa-search"></i>
-              </span>
-							</div>
-							<input class="form-control" id="zebra" name="query_song_name" type="text" placeholder="Example: Let It Be">
-          </div>
-						</div>
-
-						<button class="btn btn-primary btn-block">
-          Find Song
-        </button>
-				</form>
 			</div>
 		</div>
 	</div>
