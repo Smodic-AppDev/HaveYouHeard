@@ -1,1 +1,27 @@
-<h1>Song search results</h1>
+<div class="text-center">
+  <h2>Here's what I found:</h2>
+</div>
+<hr>
+
+<div class="row mb-5 justify-content-center">  
+    <% @tracks.each do |a_track| %>
+      
+      <%= render "spotify/song_card", a_track: a_track %>
+        
+    <% end %>
+</div>
+
+<hr>
+
+<div class="container-fluid py-6 mb-5">
+		<div class="row">
+			<div class="col-md-6 offset-md-3 text-black">
+				<h2 class="font-weight-bold">
+					Looking for something else?
+				</h2>
+
+				<%= render "spotify/search_form" %>
+
+			</div>
+		</div>
+	</div>

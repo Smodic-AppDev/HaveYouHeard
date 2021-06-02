@@ -12,7 +12,18 @@ class SpotifyController < ApplicationController
   end
 
   def return_search_results
-    render "song_search_results"
+    song_name = params.fetch("query_song_name")
+    if song_name == ""
+      redirect_to search_path, alert: "You didn't enter a song"
+    else
+      @tracks = RSpotify::Track.search(song_name, limit: 12, market: 'US')
+      render "song_search_results"
+    end
+    
+  end
+
+  def song_details
+  
   end
 
 

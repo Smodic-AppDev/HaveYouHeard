@@ -5,26 +5,8 @@
 					Looking for a song?
 				</h2>
 
-				<form action="/search_results">
-					<div class="form-group">
-						<label for="zebra">
-            Enter the name of the song below.
-            </label>
+        <%= render "spotify/search_form" %>        
 
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-                <i class="fas fa-search"></i>
-              </span>
-							</div>
-							<input class="form-control" id="zebra" name="query_song_name" type="text" placeholder="Example: Let It Be">
-          </div>
-						</div>
-
-						<button class="btn btn-primary btn-block">
-          Find Song
-        </button>
-				</form>
 			</div>
 		</div>
 	</div>

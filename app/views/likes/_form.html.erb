@@ -1,27 +1,13 @@
-<%= form_with(model: like) do |form| %>
-  <% if like.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(like.errors.count, "error") %> prohibited this like from being saved:</h2>
+<%= form_with(model: like, class: "d-inline-block") do |form| %>
+  
+  <%= form.hidden_field :fan_id %>
 
-      <ul>
-        <% like.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+  <%= form.hidden_field :song_id %>
+
+  <%= form.button class: "btn btn-link card-link pull-right" do %>
+    <i class="far fa-heart fa-fw"></i>
+
+    Like
   <% end %>
-
-  <div class="field">
-    <%= form.label :fan_id %>
-    <%= form.text_field :fan_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :song_id %>
-    <%= form.text_field :song_id %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
 <% end %>
+
