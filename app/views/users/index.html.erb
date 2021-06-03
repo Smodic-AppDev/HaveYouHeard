@@ -9,25 +9,21 @@
       <% if @followed_users.count == 0 %>
         <ul class="list-group">
           <li class="list-group-item">
-            It doesn't look like you're following anyone yet.
+            You're not following anyone yet.
           </li>
         </ul>
       <% else %>
         <ul class="list-group">
           <% @followed_users.each do |a_followed_user| %>
-            <li class="list-group-item">
-              <a href="/user/<%= a_followed_user.id %>">
-                <%= a_followed_user.first_name %> <%= a_followed_user.last_name %>
-                (<%= a_followed_user.username %>)
-              </a>
-              <form action="/delete_follow_request" method="post">
-                <input type="hidden" name="query_id"
-                  value="<%= FollowRequest.all.where(sender_id: @current_user.id, recipient_id: a_followed_user.id).first.id %>"
-                >
-                <button class="btn btn-primary">
-                  Unfollow
-                </button>
-              </form>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="col">
+                <%= link_to user_path(a_followed_user.username) do %>
+                  <%= a_followed_user.first_name + " " + a_followed_user.last_name + " (" + a_followed_user.username + ")" %>
+                <% end %>
+              </div>
+              <div class="col">
+                <%= render "follow_requests/follow_unfollow", recipient: a_followed_user %>
+              </div>
             </li>
           <% end %>
         </ul>
@@ -52,19 +48,15 @@
       <% else %>
         <ul class="list-group">
           <% @non_followed_users.each do |a_non_followed_user| %>
-            <li class="list-group-item">
-              <a href="/user/<%= a_non_followed_user.id %>">
-                <%= a_non_followed_user.first_name %> <%= a_non_followed_user.last_name %>
-                (<%= a_non_followed_user.username %>)
-              </a>
-              <form action="/insert_follow_request" method="post">
-                <input type="hidden" name="query_sender_id" value="<%= @current_user.id %>">
-                <input type="hidden" name="query_recipient_id" value="<%= a_non_followed_user.id %>">
-                
-                <button class="btn btn-primary">
-                  Follow
-                </button>
-              </form>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="col">
+                <%= link_to user_path(a_non_followed_user.username) do %>
+                  <%= a_non_followed_user.first_name + " " + a_non_followed_user.last_name + " (" + a_non_followed_user.username + ")" %>
+                <% end %>
+              </div>
+              <div class="col">
+                <%= render "follow_requests/follow_unfollow", recipient: a_non_followed_user %>
+              </div>
             </li>
           <% end %>
         </ul>
@@ -80,23 +72,77 @@
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">
-          Your followers:
+          Pending follow requests:
         </h3>
       </div>      
-      <% if @current_user.followers.count == 0 %>
+      <% if current_user.pending.count == 0 %>
         <ul class="list-group">
           <li class="list-group-item">
-            You don't have any followers yet.
+            You don't have any pending requests.
           </li>
         </ul>
       <% else %>
         <ul class="list-group">
-          <% @current_user.followers.each do |a_follower| %>
-            <li class="list-group-item">
-              <a href="/user/<%= a_follower.id %>">
-                <%= a_follower.first_name %> <%= a_follower.last_name %>
-                (<%= a_follower.username %>)
-              </a>
+          <% current_user.pending.each do |a_pending| %>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="col">
+                <%= link_to user_path(a_pending.username) do %>
+                  <%= a_pending.first_name + " " + a_pending.last_name + " (" + a_pending.username + ")" %>
+                <% end %>
+              </div>
+              <div class="col">
+                <% follow_request = current_user.pending_received_follow_requests.find_by(sender: a_pending) %>
+
+                <% if follow_request %>
+                  
+                  <% follow_request.status = "accepted" %>
+
+                  <%= form_with(model: follow_request) do |form| %>
+                    <%= form.hidden_field :status %>
+
+                    <%= form.submit "Accept follow request", class: "btn btn-outline-success btn-block mb-3" %>
+                  <% end %>
+
+                  <% follow_request.status = "rejected" %>
+
+                  <%= form_with(model: follow_request) do |form| %>
+                    <%= form.hidden_field :status %>
+
+                    <%= form.submit "Reject follow request", class: "btn btn-outline-danger btn-block mb-3" %>
+                  <% end %>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          Your followers:
+        </h3>
+      </div>      
+      <% if current_user.followers.count == 0 %>
+        <ul class="list-group">
+          <li class="list-group-item">
+            You don't have any followers.
+          </li>
+        </ul>
+      <% else %>
+        <ul class="list-group">
+          <% current_user.followers.each do |a_follower| %>
+            <li class="list-group-item d-flex justify-content-between">
+              <div class="col">
+                <%= link_to user_path(a_follower.username) do %>
+                  <%= a_follower.first_name + " " + a_follower.last_name + " (" + a_follower.username + ")" %>
+                <% end %>
+              </div>
             </li>
           <% end %>
         </ul>

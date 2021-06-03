@@ -1,0 +1,8 @@
+<div class="row mb-5 justify-content-center">  
+    
+    <% @tracks.each do |a_track| %>
+      
+      <%= render "spotify/song_card", a_track: a_track %>
+        
+    <% end %>
+</div>

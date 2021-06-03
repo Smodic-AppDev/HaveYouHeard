@@ -1,7 +1,20 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show liked feed discover ]
+  before_action :set_user, only: %i[ show liked feed ]
+
+  before_action :must_be_owner_to_view, only: %i[ feed ]
 
   def show
+    require 'rspotify'
+    RSpotify.authenticate(ENV.fetch("Spotify_Client_ID"), ENV.fetch("Spotify_Client_Secret"))
+
+    user_likes = @user.likes.order(created_at: "desc")
+    
+    if user_likes.count == 0
+      @tracks = 0
+    else
+      liked_song_ids = user_likes.pluck(:song_id)
+      @tracks = RSpotify::Track.find(liked_song_ids)
+    end
     
   end
 
@@ -11,9 +24,7 @@ class UsersController < ApplicationController
   
   def user_index
     @followed_users = current_user.leaders.order(last_name: "asc")
-    leader_ids = @followed_users.pluck(:recipient_id)
-    leader_ids = leader_ids.push(current_user.id)
-    @non_followed_users = User.all.where.not(id: leader_ids).order(last_name:"asc")
+    @non_followed_users = User.not_leaders_of(current_user).order(last_name:"asc")
     render "users/index.html.erb"
   end
 
@@ -26,5 +37,11 @@ class UsersController < ApplicationController
         @user = current_user
       end
     end
+
+    def must_be_owner_to_view
+      if current_user != @user
+        redirect_back fallback_location: root_url, alert: "You're not authorized for that."
+      end
+    end 
 
 end

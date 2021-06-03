@@ -6,13 +6,13 @@
 %>
 <% if leader_likes.count == 1 %>
   <small>You like this</small>
-<% elsif User.all.where(id: leader_likes.at(0).user_id).first.id == current_user.id %>
+<% elsif User.all.where(id: leader_likes.first.fan_id).first.id == current_user.id %>
   <small>
     You and <%= leader_likes.count - 1 %> more like this
   </small>
 <% else %>
   <small>
-    <%= User.all.where(id: leader_likes.at(0).fan_id).first.first_name %> and
+    <%= User.all.where(id: leader_likes.first.fan_id).first.first_name %> and
     <%= leader_likes.count - 1 %> more like this
   </small>
 <% end %>

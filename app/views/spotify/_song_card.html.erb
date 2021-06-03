@@ -14,26 +14,17 @@
       </h1>
   </div>
   
-  <div class="card-body">
+  <div class="card-body">    
     
-    <% if a_track.name.length > 25 %>
-      <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
-        <%= a_track.name[0..24] %>...
-      <% end %>
-    <% else %>
-      <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
-        <%= a_track.name %>
-      <% end %>
+    <%= link_to song_details_path(a_track.id), class: "card-title card-link font-weight-bold" do %>
+      <%= truncate(a_track.name, length: 30) %>
     <% end %>
-    
-    <% if a_track.artists.first.name.length > 22 %>
-      <p class="card-text">by <%= a_track.artists.first.name[0..21] %>...</p>
-    <% else %>
-      <p class="card-text">by <%= a_track.artists.first.name %></p>
-    <% end %>
+        
+    <p class="card-text">by <%= truncate(a_track.artists.first.name, length: 35) %></p>
 
     <div>
-      <% if current_user.likes.where(song_id: a_track.id).count == 0 %>
+      <% like = current_user.likes.find_by(song_id: a_track.id) %>
+      <% if like.nil? %>
 
         <%= render "likes/who_likes", a_track: a_track %>
         
@@ -41,9 +32,8 @@
 
       <% else %>  
 
-        <%= render "likes/who_else_likes", a_track: a_track %>
+        <%= render "likes/who_else_likes", a_track: a_track %>        
         
-        <% like = current_user.likes.find_by(song_id: a_track.id) %>
         <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
           <i class="fas fa-heart fa-fw"></i>
           Unlike
