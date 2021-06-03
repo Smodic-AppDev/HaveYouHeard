@@ -23,7 +23,7 @@ class SpotifyController < ApplicationController
   end
 
   def song_details
-  
+    @song_id = params.fetch("path_id")  
   end
 
 

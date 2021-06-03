@@ -19,6 +19,21 @@ class UsersController < ApplicationController
   end
 
   def feed
+    require 'rspotify'
+    RSpotify.authenticate(ENV.fetch("Spotify_Client_ID"), ENV.fetch("Spotify_Client_Secret"))
+
+    leader_ids = @user.leaders.pluck(:recipient_id)
+    
+    feed_likes = Like.all.where(fan_id: leader_ids).order(created_at: "asc")
+    
+    if feed_likes.nil?
+      @tracks = 0
+    else
+      unique_feed_likes = feed_likes.uniq(&:song_id)
+      desc_unique_feed_likes = Like.all.where(id: unique_feed_likes).order(created_at: "desc")
+      feed_song_ids = desc_unique_feed_likes.pluck(:song_id)
+      @tracks = RSpotify::Track.find(feed_song_ids)
+    end
   
   end 
   
