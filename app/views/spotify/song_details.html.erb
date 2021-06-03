@@ -1,1 +1,40 @@
-<h1>Song details</h1>
+<div class="text-center">
+  <h2>Song Details</h2>
+</div>
+<hr>
+
+<% a_track = RSpotify::Track.find(@song_id) %>
+
+<div class="row mb-1 justify-content-center">
+  <%= render "spotify/song_card", a_track: a_track %>
+</div>
+
+<% 
+  song_likes = Like.all.where(song_id: a_track.id)
+  leader_ids = current_user.leaders.pluck(:recipient_id)
+  leader_likes = song_likes.where(fan_id: leader_ids).order(created_at: "asc")              
+%>
+
+
+<div class="row mb-1 justify-content-center">
+  <div class="card mb-2" style="width: 18rem;">
+    <div class="card-header">
+      <h3 class="card-title">
+        People you follow that like this song:
+      </h3>
+    </div>
+    <ul class="list-group">
+      <% User.all.where(id: leader_likes.pluck(:fan_id)).each do |a_user| %>
+        <% if a_user.id == current_user.id %>
+          <!-- Intentionally blank -->
+        <% else %>
+          <li class="list-group-item">
+            <%= link_to user_path(a_user.username) do %>
+                  <%= a_user.first_name + " " + a_user.last_name + " (" + a_user.username + ")" %>
+                <% end %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+</div>

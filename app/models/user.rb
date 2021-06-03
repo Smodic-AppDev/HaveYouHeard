@@ -59,5 +59,6 @@ class User < ApplicationRecord
     }
 
   scope :past_week, -> { where(created_at: 1.week.ago...) }
+  scope :not_leaders_of, ->(user) { where.not(id: user.leaders.ids.push(user.id))}
 
 end

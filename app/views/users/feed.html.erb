@@ -1,1 +1,24 @@
-<h1>User feed</h1>
+<div class="text-center">
+  <h2>Your Feed <i class="fab fa-slideshare"></i></h2>
+</div>
+<div class="text-center">
+  <small>The songs liked by the <%= current_user.leaders.count.to_s %>
+    <% if current_user.leaders.count == 1 %>
+      person
+    <% else %>
+      people 
+    <% end %>
+    you follow.</small>
+</div>
+<hr>
+<% if @tracks == 0 %>
+  <div class="text-center">
+    <p>Nothing to see here yet.</p>
+  </div>
+<% else %>
+  <div class="row mb-5 justify-content-center">
+    <% @tracks.each_with_index do |a_track| %>
+      <%= render "spotify/song_card", a_track: a_track %>
+    <% end %>
+  </div?
+<% end %>

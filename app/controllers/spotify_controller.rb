@@ -13,7 +13,7 @@ class SpotifyController < ApplicationController
 
   def return_search_results
     song_name = params.fetch("query_song_name")
-    if song_name == ""
+    if song_name.empty?
       redirect_to search_path, alert: "You didn't enter a song"
     else
       @tracks = RSpotify::Track.search(song_name, limit: 12, market: 'US')
@@ -23,7 +23,7 @@ class SpotifyController < ApplicationController
   end
 
   def song_details
-  
+    @song_id = params.fetch("path_id")  
   end
 
 
