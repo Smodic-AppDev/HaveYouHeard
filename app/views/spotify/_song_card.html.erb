@@ -22,25 +22,12 @@
         
     <p class="card-text">by <%= truncate(a_track.artists.first.name, length: 35) %></p>
 
+    <% like = current_user.likes.find_by(song_id: a_track.id) %>
+
     <div>
-      <% like = current_user.likes.find_by(song_id: a_track.id) %>
-      <% if like.nil? %>
-
-        <%= render "likes/who_likes", a_track: a_track %>
-        
-        <%= render "likes/form", like: current_user.likes.build(song_id: a_track.id) %>
-
-      <% else %>  
-
-        <%= render "likes/who_else_likes", a_track: a_track %>        
-        
-        <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete do %>
-          <i class="fas fa-heart fa-fw"></i>
-          Unlike
-        <% end %>
-        
-        
-      <% end %>
+      
+      <%= render "likes/like_button", like: like, a_track_id: a_track.id %>
+      
     </div>
   </div>
 </div>

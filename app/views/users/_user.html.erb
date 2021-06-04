@@ -10,7 +10,7 @@
   </div>
 </div>
 <% if @user != current_user %>
-  <div class="mb-4 d-flex justify-content-between">
+  <div class="mb-2 d-flex justify-content-between">
     <div>
       <%= user.followers.size %> 
       followers
@@ -29,7 +29,7 @@
     <% end %>
   </div>
 
-  <div class="row mb-3">
+  <div class="row mb-2">
     <div class="col">
       <% follow_request = current_user.pending_received_follow_requests.find_by(sender: @user) %>
 
@@ -57,10 +57,33 @@
     </div>
   </div>
 
-  <div class="row mb-4">
+  <div class="row mb-2">
     <div class="col">
       <%= render "follow_requests/follow_unfollow", recipient: @user %>
     </div>
   </div>
+
+<% else %>
+
+  <div class="mb-2 d-flex justify-content-between">
+    <div>
+      <%= user.followers.size %> 
+      followers
+    </div>
+
+    <div>
+      <%= user.leaders.size %>
+      following
+    </div>
+
+    <% if policy(@user).update? %>
+      <div>
+        <%= user.pending.size %>
+        pending
+      </div>
+    <% end %>
+  </div>
+
 <% end %>
+
 

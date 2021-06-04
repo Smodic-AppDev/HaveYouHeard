@@ -25,9 +25,7 @@
     </div>
     <ul class="list-group">
       <% User.all.where(id: leader_likes.pluck(:fan_id)).each do |a_user| %>
-        <% if a_user.id == current_user.id %>
-          <!-- Intentionally blank -->
-        <% else %>
+        <% if a_user.id != current_user.id %>
           <li class="list-group-item">
             <%= link_to user_path(a_user.username) do %>
                   <%= a_user.first_name + " " + a_user.last_name + " (" + a_user.username + ")" %>

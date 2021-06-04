@@ -1,8 +1,14 @@
 <div class="row mb-5 justify-content-center">  
     
-    <% @tracks.each do |a_track| %>
-      
-      <%= render "spotify/song_card", a_track: a_track %>
+    <% if @tracks == 0 %>
+      <div class="text-center">
+        <small>Nothing to see here yet.</small>
+      </div>
+    <% else %>
+      <% @tracks.each do |a_track| %>
         
+        <%= render "spotify/song_card", a_track: a_track %>
+          
+      <% end %>
     <% end %>
 </div>

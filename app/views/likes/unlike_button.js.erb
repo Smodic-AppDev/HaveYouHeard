@@ -1,0 +1,3 @@
+var updated_like_button = $("<%= j(render 'likes/like_button', like: nil, a_track_id: @like.song_id) %>");
+
+$("#song_<%= @like.song_id %>_like_button").replaceWith(updated_like_button);

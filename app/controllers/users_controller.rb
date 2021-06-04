@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
     user_likes = @user.likes.order(created_at: "desc")
     
-    if user_likes.count == 0
+    if user_likes.empty?
       @tracks = 0
     else
       liked_song_ids = user_likes.pluck(:song_id)
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
     
     feed_likes = Like.all.where(fan_id: leader_ids).order(created_at: "asc")
     
-    if feed_likes.nil?
+    if feed_likes.count == 0
       @tracks = 0
     else
       unique_feed_likes = feed_likes.uniq(&:song_id)
