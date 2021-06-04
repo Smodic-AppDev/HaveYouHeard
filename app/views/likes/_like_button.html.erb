@@ -1,0 +1,18 @@
+<div id="song_<%= a_track_id  %>_like_button">      
+  <% if like.nil? %>
+
+    <%= render "likes/who_likes", a_track_id: a_track_id %>
+    
+    <%= render "likes/form", like: current_user.likes.build(song_id: a_track_id) %>
+
+  <% else %>  
+
+    <%= render "likes/who_else_likes", a_track_id: a_track_id %>
+            
+    <%= link_to like, class: "btn btn-link card-link pull-right", method: :delete, remote: true do %>
+      <i class="fas fa-heart fa-fw"></i>
+      Unlike
+    <% end %> 
+    
+  <% end %>
+</div>

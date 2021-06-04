@@ -1,5 +1,5 @@
 <% 
-  song_likes = Like.all.where(song_id: a_track.id)
+  song_likes = Like.all.where(song_id: a_track_id)
   leader_ids = current_user.leaders.pluck(:recipient_id)
   leader_likes = song_likes.where(fan_id: leader_ids).order(created_at: "asc")              
 %>
