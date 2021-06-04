@@ -6,6 +6,17 @@
 
 <hr>
 
+<div class= "text-center">
+  <i class="fas fa-heart fa-fw"></i>
+  <% if @user == current_user %>
+    <small>The songs you like.</small>
+  <% else %>
+    <small>The songs <%= @user.first_name + " " + @user.last_name + " (" + @user.username + ")" %> likes.</small>
+  <% end %>
+</div>
+
+<hr>
+
 <% if policy(@user).show? %>
   <%= render "users/likes" %>
 <% end %>

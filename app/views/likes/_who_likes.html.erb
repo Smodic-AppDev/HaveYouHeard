@@ -7,11 +7,11 @@
   <small>Be the first to like this</small>
 <% elsif leader_likes.count == 1 %>
   <small>
-    <%= User.all.where(id: leader_likes.first.fan_id).first.first_name %> likes this
+    <%= leader_likes.first.fan.first_name %> likes this
   </small>
 <% else %>
   <small>
-    <%= User.all.where(id: leader_likes.first.fan_id).first.first_name %> and
+    <%= leader_likes.first.fan.first_name %> and
     <%= leader_likes.count - 1 %> more like this
   </small>
 <% end %>            
